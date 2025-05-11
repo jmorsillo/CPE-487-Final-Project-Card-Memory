@@ -34,7 +34,7 @@ ARCHITECTURE Behavioral OF vga_top IS
     Constant cx4 : std_logic_vector(10 downto 0) := conv_std_logic_vector(700,11);
     
     Signal value : STD_LOGIC_VECTOR (3 DOWNTO 0);
-	Signal hit : STD_LOGIC;
+	Signal hit : STD_LOGIC := '0';
 	
 	Signal flip1 : std_logic := '1';
     Signal flip2 : std_logic := '1';
@@ -79,6 +79,8 @@ ARCHITECTURE Behavioral OF vga_top IS
 		    card_flipB : IN STD_LOGIC;
 		    card_flipC : IN STD_LOGIC;
 		    
+		    hit : IN STD_LOGIC;
+		    
             red : OUT STD_LOGIC;
             green : OUT STD_LOGIC;
             blue : OUT STD_LOGIC
@@ -100,14 +102,14 @@ ARCHITECTURE Behavioral OF vga_top IS
         );
     END COMPONENT;
     
-    COMPONENT keypad IS
-	PORT (
-		samp_ck : IN STD_LOGIC; -- clock to strobe columns
-		col : OUT STD_LOGIC_VECTOR (4 DOWNTO 1); -- output column lines
-		row : IN STD_LOGIC_VECTOR (4 DOWNTO 1); -- input row lines
-		value : OUT STD_LOGIC_VECTOR (3 DOWNTO 0); -- hex value of key depressed
-	    hit : OUT STD_LOGIC); -- indicates when a key has been pressed
-    END COMPONENT;
+--    COMPONENT keypad IS
+--	PORT (
+--		samp_ck : IN STD_LOGIC; -- clock to strobe columns
+--		col : OUT STD_LOGIC_VECTOR (4 DOWNTO 1); -- output column lines
+--		row : IN STD_LOGIC_VECTOR (4 DOWNTO 1); -- input row lines
+--		value : OUT STD_LOGIC_VECTOR (3 DOWNTO 0); -- hex value of key depressed
+--	    hit : OUT STD_LOGIC); -- indicates when a key has been pressed
+--    END COMPONENT;
     
     component clk_wiz_0 is
     port (
@@ -154,6 +156,8 @@ BEGIN
         card_flipB => flipB,
         card_flipC => flipC,
         
+        hit => hit,
+        
         red       => S_red, 
         green     => S_green, 
         blue      => S_blue
@@ -176,14 +180,14 @@ BEGIN
     );
     vga_vsync <= S_vsync; --connect output vsync
     
-    kp: keypad
-    port map(
-        samp_ck        => pxl_clk,
-	    col            => KB_col,
-	    row            => KB_row,
-        value          => value,
-	    hit            => hit
-	    );
+--    kp: keypad
+--    port map(
+--        samp_ck        => pxl_clk,
+--	    col            => KB_col,
+--	    row            => KB_row,
+--        value          => value,
+--	    hit            => hit
+--	    );
 	    
     clk_wiz_0_inst : clk_wiz_0 
     port map (
@@ -191,7 +195,7 @@ BEGIN
       clk_out1 => pxl_clk
     );
     
-Process (flip1, flip2, flip3, flip4, flip5, flip6, flip7, flip8, flip9, flipA, flipB, flipC, hit, value)
+Process (flip1, flip2, flip3, flip4, flip5, flip6, flip7, flip8, flip9, flipA, flipB, flipC, SW)
 begin
 
 --case hit & value is
@@ -223,18 +227,19 @@ begin
   --  end case;
     
     case SW is
-    when "0000000000000001" => flip1 <= '0';
-    when "0000000000000010" => flip2 <= '0';
-    when "0000000000000100" => flip3 <= '0';
-    when "0000000000001000" => flip4 <= '0';
-    when "0000000000010000" => flip5 <= '0';
-    when "0000000000100000" => flip6 <= '0';
-    when "0000000001000000" => flip7 <= '0';
-    when "0000000010000000" => flip8 <= '0';
-    when "0000000100000000" => flip9 <= '0';
-    when "0000001000000000" => flipA <= '0';
-    when "0000010000000000" => flipB <= '0';
-    when "0000100000000000" => flipC <= '0';
+    when "0000000000000001" => flip1 <= '0'; hit <='1';
+    when "0000000000000010" => flip2 <= '0'; hit <='1';
+    when "0000000000000100" => flip3 <= '0'; hit <='1';
+    when "0000000000001000" => flipA <= '0'; hit <='1';
+    when "0000000000010000" => flip4 <= '0'; hit <='1';
+    when "0000000000100000" => flip5 <= '0'; hit <='1';
+    when "0000000001000000" => flip6 <= '0'; hit <='1';
+    when "0000000010000000" => flipB <= '0'; hit <='1';
+    when "0000000100000000" => flip7 <= '0'; hit <='1';
+    when "0000001000000000" => flip8 <= '0'; hit <='1';
+    when "0000010000000000" => flip9 <= '0'; hit <='1';
+    when "0000100000000000" => flipC <= '0'; hit <='1';
+    
     when others => 
     flip1 <= '1';
     flip2 <= '1';
@@ -248,6 +253,7 @@ begin
     flipA <= '1';
     flipB <= '1';
     flipC <= '1';
+    hit <= '0';
     end case;
 
  

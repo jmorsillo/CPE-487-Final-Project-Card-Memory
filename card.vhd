@@ -31,6 +31,8 @@ ENTITY card IS
 	    card_flipB : IN STD_LOGIC;
 	    card_flipC : IN STD_LOGIC;
 	    
+	    hit : IN STD_LOGIC;
+	    
 		red       : OUT STD_LOGIC;
 		green     : OUT STD_LOGIC;
 		blue      : OUT STD_LOGIC
@@ -39,7 +41,7 @@ END card;
 
 ARCHITECTURE Behavioral OF card IS
 	CONSTANT size  : INTEGER := 40;
-	SIGNAL card_on1 : STD_LOGIC; -- indicates whether ball is over current pixel position
+	SIGNAL card_on1 : STD_LOGIC; 
 	SIGNAL card_on2 : STD_LOGIC;
 	SIGNAL card_on3 : STD_LOGIC;
 	SIGNAL card_on4 : STD_LOGIC;
@@ -51,6 +53,28 @@ ARCHITECTURE Behavioral OF card IS
 	SIGNAL card_onA : STD_LOGIC;
 	SIGNAL card_onB : STD_LOGIC;
 	SIGNAL card_onC : STD_LOGIC;
+	
+	SIGNAL card_lock1 : STD_LOGIC := '0'; 
+	SIGNAL card_lock2 : STD_LOGIC := '0';
+	SIGNAL card_lock3 : STD_LOGIC := '0';
+	SIGNAL card_lock4 : STD_LOGIC := '0';
+	SIGNAL card_lock5 : STD_LOGIC := '0';
+	SIGNAL card_lock6 : STD_LOGIC := '0';
+	SIGNAL card_lock7 : STD_LOGIC := '0';
+	SIGNAL card_lock8 : STD_LOGIC := '0';
+	SIGNAL card_lock9 : STD_LOGIC := '0';
+	SIGNAL card_lockA : STD_LOGIC := '0';
+	SIGNAL card_lockB : STD_LOGIC := '0';
+	SIGNAL card_lockC : STD_LOGIC := '0';
+	
+    SIGNAL hits: std_logic := '1';
+	
+	SIGNAL game_NONE_complete : STD_LOGIC := '0'; 
+	SIGNAL game_B_complete : STD_LOGIC := '0';
+	SIGNAL game_G_complete : STD_LOGIC := '0';
+	SIGNAL game_RB_complete : STD_LOGIC := '0';
+	SIGNAL game_RG_complete : STD_LOGIC := '0';
+	SIGNAL game_BG_complete : STD_LOGIC := '0';
 	
 	
 BEGIN
@@ -201,58 +225,265 @@ BEGIN
 		END IF;
 		END PROCESS;
 		
-	COLOR : PROCESS (card_on1, card_on2, card_on3, card_on4, card_on5, card_on6, card_on7, card_on8, card_on9, card_onA, card_onB, card_onC, card_flip1, card_flip2, card_flip3, card_flip4, card_flip5, card_flip6, card_flip7, card_flip8, card_flip9, card_flipA, card_flipB, card_flipC) IS
+	Game : PROCESS (hit, hits, card_flip1, card_flip2, card_flip3, card_flip4, card_flip5, card_flip6, card_flip7, card_flip8, card_flip9, card_flipA, card_flipB, card_flipC, card_lock1, card_lock2, card_lock3, card_lock4, card_lock5, card_lock6, card_lock7, card_lock8, card_lock9, card_lockA, card_lockB, card_lockC) IS 
+	begin  
+	   IF (rising_edge(hit))  then
+	       IF(hits = '0')then
+	           IF(card_flip1 = '0') AND (card_lock1 = '0') then
+	               card_lock1 <= '1';
+	               hits <='1';
+	           ELSIF(card_flip2 = '0') AND (card_lock2 = '0') then
+	               card_lock2 <= '1';
+	               hits <='1';
+	           ELSIF(card_flip3 = '0') AND (card_lock3 = '0') then
+	               card_lock3 <= '1';
+	               hits <='1';
+	           ELSIF(card_flipA = '0') AND (card_lockA = '0') then
+	               card_lockA <= '1';
+	               hits <='1';
+	           ELSIF(card_flip4 = '0') AND (card_lock4 = '0') then
+	               card_lock4 <= '1';
+	               hits <='1';
+	           ELSIF(card_flip5 = '0') AND (card_lock5 = '0') then
+	               card_lock5 <= '1';
+	               hits <='1';
+	           ELSIF(card_flip6 = '0') AND (card_lock6 = '0') then
+	               card_lock6 <= '1';
+	               hits <='1';
+	           ELSIF(card_flipB = '0') AND (card_lockB = '0') then
+	               card_lockB <= '1';
+	               hits <='1';
+	           ELSIF(card_flip7 = '0') AND (card_lock7 = '0') then
+	               card_lock7 <= '1';
+	               hits <='1';
+	           ELSIF(card_flip8 = '0') AND (card_lock8 = '0') then
+	               card_lock8 <= '1';
+	               hits <='1'; 
+	           ELSIF(card_flip9 = '0') AND (card_lock9 = '0') then
+	               card_lock9 <= '1';
+	               hits <='1';
+	           ELSIF(card_flipC = '0') AND (card_lockC = '0') then
+	               card_lockC <= '1';
+	               hits <='1';
+	           END IF;
+	           
+	       ELSIF(hits = '1')then
+	           IF(card_flip1 = '0') AND (card_lock1 = '0')then
+	               IF(card_lock2 = '0') then	
+	                   hits <='0';
+	               else
+	                   card_lock1 <= '1';
+	                   hits <= '0';
+	               end if;
+	               
+	           ELSIF(card_flip2 = '0') AND (card_lock2 = '0') then
+	               IF(card_lock1 = '0') then	      
+	                   hits <='0';
+	               else
+	                   card_lock2 <= '1';
+	                   hits <= '0';
+	               end if;
+	           ELSIF(card_flip3 = '0') AND (card_lock3 = '0') then
+	               IF(card_lockA = '0') then	
+	                   hits <='0';
+	               else
+	                   card_lock3 <= '1';
+	                   hits <= '0';
+	               end if;
+	           ELSIF(card_flipA = '0') AND (card_lockA = '0') then
+	               IF(card_lock3 = '0') then	
+	                   hits <='0';
+	               else
+	                   card_lockA <= '1';
+	                   hits <= '0';
+	               end if;
+	           ELSIF(card_flip4 = '0') AND (card_lock4 = '0') then
+	               IF(card_lock5 = '0') then	      
+	                   hits <='0';
+	               else
+	                   card_lock4 <= '1';
+	                   hits <= '0';
+	               end if;
+	           ELSIF(card_flip5 = '0') AND (card_lock5 = '0') then
+	               IF(card_lock4 = '0') then	      
+	                   hits <='0';
+	               else
+	                   card_lock5 <= '1';
+	                   hits <= '0';
+	               end if;
+	           ELSIF(card_flip6 = '0') AND (card_lock6 = '0') then
+	               IF(card_lockB = '0') then	      
+	                   hits <='0';
+	               else
+	                   card_lock6 <= '1';
+	                   hits <= '0';
+	               end if;
+	           ELSIF(card_flipB = '0') AND (card_lockB = '0') then
+	               IF(card_lock6 = '0') then	      
+	                   hits <='0';
+	               else
+	                   card_lockB <= '1';
+	                   hits <= '0';
+	               end if;
+	           ELSIF(card_flip7 = '0') AND (card_lock7 = '0') then
+	               IF(card_lock8 = '0') then	      
+	                   hits <='0';
+	               else
+	                   card_lock7 <= '1';
+	                   hits <= '0';
+	               end if;
+	           ELSIF(card_flip8 = '0') AND (card_lock8 = '0') then
+	               IF(card_lock7 = '0') then	      
+	                   hits <='0';
+	               else
+	                   card_lock8 <= '1';
+	                   hits <= '0';
+	               end if;
+	           ELSIF(card_flip9 = '0') AND (card_lock9 = '0') then
+	               IF(card_lockC = '0') then	      
+	                   hits <='0';
+	               else
+	                   card_lock9 <= '1';
+	                   hits <= '0';
+	               end if;
+	           ELSIF(card_flipC = '0') AND (card_lockC = '0') then
+	               IF(card_lock9 = '0') then	      
+	                   hits <='0';
+	               else
+	                   card_lockC <= '1';
+	                   hits <= '0';
+	               end if;
+	           END IF;
+	           
+	       END IF;
+	       
+	   END IF;
+	   END PROCESS;
+	
+	COLOR : PROCESS (card_on1, card_on2, card_on3, card_on4, card_on5, card_on6, card_on7, card_on8, card_on9, card_onA, card_onB, card_onC, card_lock1, card_lock2, card_lock3, card_lock4, card_lock5, card_lock6, card_lock7, card_lock8, card_lock9, card_lockA, card_lockB, card_lockC, card_flip1, card_flip2, card_flip3, card_flip4, card_flip5, card_flip6, card_flip7, card_flip8, card_flip9, card_flipA, card_flipB, card_flipC) IS
 	BEGIN
-		IF (card_on1 = '1') THEN
-				red <= '1'; -- color setup for red card on white background (face down card)
+		IF (card_on1 = '1') THEN --CARD 1 BLUE+GREEN FLIP
+		      IF (card_lock1 = '1')then
+		        red <= '0';
+		        green <= '1';
+		        blue <= '1';
+		      Else
+				red <= card_flip1; 
 	            green <= NOT card_flip1;
 	            blue  <= NOT card_flip1;
-	    elsif (card_on2 = '1') then
-	            red <= '1'; -- color setup for red card on white background (face down card)
+	          end if;
+	    elsif (card_on2 = '1') then --CARD 2 BLUE+GREEN FLIP
+	          IF (card_lock2 = '1')then
+		        red <= '0';
+		        green <= '1';
+		        blue <= '1';
+		      Else
+				red <= card_flip2; 
 	            green <= NOT card_flip2;
 	            blue  <= NOT card_flip2;
-	    elsif (card_on3 = '1') then
-	            red <= '1'; -- color setup for red card on white background (face down card)
-	            green <= NOT card_flip3;
+	          end if;
+	    elsif (card_on3 = '1') then --CARD 3 BLUE FLIP
+	           IF (card_lock3 = '1')then
+	            red <= '0';
+	            green <= '0';
+	            blue <= '1';
+	           Else
+	            red <= card_flip3; 
+	            green <= '0';
 	            blue  <= NOT card_flip3;
-	    elsif (card_onA = '1') then
-	            red <= '1'; -- color setup for red card on white background (face down card)
-	            green <= NOT card_flipA;
+	           end if;
+	    elsif (card_onA = '1') then --CARD A BLUE FLIP
+	           IF (card_lockA = '1')then
+	            red <= '0';
+	            green <= '0';
+	            blue <= '1';
+	           Else
+	            red <= card_flipA; 
+	            green <= '0';
 	            blue  <= NOT card_flipA;
-	    elsif (card_on4 = '1') then
-	            red <= '1'; -- color setup for red card on white background (face down card)
-	            green <= NOT card_flip4;
+	           end if;
+	    elsif (card_on4 = '1') then --CARD 4 RED+BLUE FLIP
+	           IF (card_lock4 = '1')then
+	            red <= '1'; 
+	            green <= '0';
+	            blue  <= '1';
+	           Else
+	            red <= '1';
+	            green <= '0';
 	            blue  <= NOT card_flip4;
-	    elsif (card_on5 = '1') then
-	            red <= '1'; -- color setup for red card on white background (face down card)
-	            green <= NOT card_flip5;
+	           end if;
+	    elsif (card_on5 = '1') then --CARD 5 RED+BLUE FLIP
+	           IF (card_lock5 = '1')then
+	            red <= '1'; 
+	            green <= '0';
+	            blue  <= '1';
+	           Else
+	            red <= '1';
+	            green <= '0';
 	            blue  <= NOT card_flip5;
-	    elsif (card_on6 = '1') then
-	            red <= '1'; -- color setup for red card on white background (face down card)
+	           end if;
+	    elsif (card_on6 = '1') then --CARD 6 GREEN FLIP
+	           IF (card_lock6 = '1')then
+	            red <= '0';
+	            green <= '1';
+	            blue  <= '0';
+	           Else	  	           
+	            red <= card_flip6; 
 	            green <= NOT card_flip6;
-	            blue  <= NOT card_flip6;
-	    elsif (card_onB = '1') then
-	            red <= '1'; -- color setup for red card on white background (face down card)
+	            blue  <= '0';
+	           end if;
+	    elsif (card_onB = '1') then --CARD B GREEN FLIP
+	           IF (card_lockB = '1')then
+	            red <= '0';
+	            green <= '1';
+	            blue  <= '0';
+	           Else	  	           
+	            red <= card_flipB; 
 	            green <= NOT card_flipB;
-	            blue  <= NOT card_flipB;
-	    elsif (card_on7 = '1') then
-	            red <= '1'; -- color setup for red card on white background (face down card)
+	            blue  <= '0';
+	           end if;
+	    elsif (card_on7 = '1') then --CARD 7 RED+GREEN FLIP
+	           IF (card_lock7 = '1')then
+	            red <= '1';
+	            green <= '1';
+	            blue  <= '0';
+	           Else
+	            red <= '1'; 
 	            green <= NOT card_flip7;
-	            blue  <= NOT card_flip7;
-	    elsif (card_on8 = '1') then
-	            red <= '1'; -- color setup for red card on white background (face down card)
+	            blue  <= '0';
+	           end if;
+	    elsif (card_on8 = '1') then --CARD 8 RED+GREEN FLIP
+	           IF (card_lock8 = '1')then
+	            red <= '1';
+	            green <= '1';
+	            blue  <= '0';
+	           Else
+	            red <= '1'; 
 	            green <= NOT card_flip8;
-	            blue  <= NOT card_flip8;
-	    elsif (card_on9 = '1') then
-	            red <= '1'; -- color setup for red card on white background (face down card)
-	            green <= NOT card_flip9;
-	            blue  <= NOT card_flip9;
-	    elsif (card_onC = '1') then
-	            red <= '1'; -- color setup for red card on white background (face down card)
-	            green <= NOT card_flipC;
-	            blue  <= NOT card_flipC;
+	            blue  <= '0';
+	           end if;
+	    elsif (card_on9 = '1') then --CARD 9 NO COLOR? FLIP
+	           IF (card_lock9 = '1')then
+	            red <= '0';
+	            green <= '0';
+	            blue  <= '0';
+	           Else
+	            red <= card_flip9; 
+	            green <= '0';
+	            blue  <= '0';
+	           end if;
+	    elsif (card_onC = '1') then --CARD C NO COLOR? FLIP
+	           IF (card_lockC = '1')then
+	            red <= '0';
+	            green <= '0';
+	            blue  <= '0';
+	           Else
+	            red <= card_flipC; 
+	            green <= '0';
+	            blue  <= '0';
+	           end if;
 		ELSE
-			red <= '1'; -- color setup for red card on white background (face down card)
+			red <= '1'; 
 	        green <= '1';
 	        blue  <= '1';
 		END IF;
