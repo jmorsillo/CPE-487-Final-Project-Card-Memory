@@ -376,7 +376,7 @@ BEGIN
 	       card_lock8 <= '0';
 	       card_lock9 <= '0';
 	       card_lockC <= '0';
-		elsif (card_on1 = '1') THEN --CARD 1 BLUE+GREEN FLIP
+	   elsif (card_on1 = '1') THEN --CARD 1 BLUE+GREEN FLIP
 		      IF (card_lock1 = '1')then
 		        red <= '0';
 		        green <= '1';
