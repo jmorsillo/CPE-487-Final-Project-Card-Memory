@@ -32,6 +32,7 @@ ENTITY card IS
 	    card_flipC : IN STD_LOGIC;
 	    
 	    hit : IN STD_LOGIC;
+	    RESET : IN STD_LOGIC;
 	    
 		red       : OUT STD_LOGIC;
 		green     : OUT STD_LOGIC;
@@ -225,9 +226,23 @@ BEGIN
 		END IF;
 		END PROCESS;
 		
-	Game : PROCESS (hit, hits, card_flip1, card_flip2, card_flip3, card_flip4, card_flip5, card_flip6, card_flip7, card_flip8, card_flip9, card_flipA, card_flipB, card_flipC, card_lock1, card_lock2, card_lock3, card_lock4, card_lock5, card_lock6, card_lock7, card_lock8, card_lock9, card_lockA, card_lockB, card_lockC) IS 
-	begin  
-	   IF (rising_edge(hit))  then
+	Game : PROCESS
+	begin
+	wait until (rising_edge(v_sync));
+	   If (RESET = '1') then
+	       card_lock1 <= '0';
+	       card_lock2 <= '0';
+	       card_lock3 <= '0';
+	       card_lockA <= '0';
+	       card_lock4 <= '0';
+	       card_lock5 <= '0';
+	       card_lock6 <= '0';
+	       card_lockB <= '0';
+	       card_lock7 <= '0';
+	       card_lock8 <= '0';
+	       card_lock9 <= '0';
+	       card_lockC <= '0';
+	   Elsif (hit='1')  then
 	       IF(hits = '0')then
 	           IF(card_flip1 = '0') AND (card_lock1 = '0') then
 	               card_lock1 <= '1';
@@ -266,7 +281,6 @@ BEGIN
 	               card_lockC <= '1';
 	               hits <='1';
 	           END IF;
-	           
 	       ELSIF(hits = '1')then
 	           IF(card_flip1 = '0') AND (card_lock1 = '0')then
 	               IF(card_lock2 = '0') then	
@@ -356,7 +370,7 @@ BEGIN
 	           END IF;
 	           
 	       END IF;
-	       
+	   
 	   END IF;
 	   END PROCESS;
 	

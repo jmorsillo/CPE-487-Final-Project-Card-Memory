@@ -8,12 +8,14 @@ ENTITY vga_top IS
         clk_in    : IN STD_LOGIC;
         SW : IN STD_LOGIC_VECTOR (15 downto 0);
         KB_row : IN STD_LOGIC_VECTOR (4 downto 1);
+        btnc : IN STD_LOGIC;
         KB_col : OUT STD_LOGIC_VECTOR (4 downto 1);
         vga_red : OUT STD_LOGIC_VECTOR (2 downto 0);
         vga_green : OUT STD_LOGIC_VECTOR (2 DOWNTO 0);
         vga_blue  : OUT STD_LOGIC_VECTOR (1 DOWNTO 0);
         vga_hsync : OUT STD_LOGIC;
         vga_vsync : OUT STD_LOGIC
+        
     );
 END vga_top;
 
@@ -48,7 +50,7 @@ ARCHITECTURE Behavioral OF vga_top IS
     Signal flipA : std_logic := '1';
     Signal flipB : std_logic := '1';
     Signal flipC : std_logic := '1';
-    
+    Signal RESET : std_logic := '0';
     
     COMPONENT card IS
         PORT (
@@ -80,6 +82,7 @@ ARCHITECTURE Behavioral OF vga_top IS
 		    card_flipC : IN STD_LOGIC;
 		    
 		    hit : IN STD_LOGIC;
+		    RESET : IN STD_LOGIC;
 		    
             red : OUT STD_LOGIC;
             green : OUT STD_LOGIC;
@@ -157,6 +160,7 @@ BEGIN
         card_flipC => flipC,
         
         hit => hit,
+        RESET => RESET,
         
         red       => S_red, 
         green     => S_green, 
@@ -195,7 +199,7 @@ BEGIN
       clk_out1 => pxl_clk
     );
     
-Process (flip1, flip2, flip3, flip4, flip5, flip6, flip7, flip8, flip9, flipA, flipB, flipC, SW)
+Process (flip1, flip2, flip3, flip4, flip5, flip6, flip7, flip8, flip9, flipA, flipB, flipC, hit, value)
 begin
 
 --case hit & value is
@@ -239,6 +243,7 @@ begin
     when "0000001000000000" => flip8 <= '0'; hit <='1';
     when "0000010000000000" => flip9 <= '0'; hit <='1';
     when "0000100000000000" => flipC <= '0'; hit <='1';
+    when "1000000000000000" => RESET <= '1'; 
     
     when others => 
     flip1 <= '1';
@@ -254,6 +259,7 @@ begin
     flipB <= '1';
     flipC <= '1';
     hit <= '0';
+    RESET <= '0';
     end case;
 
  
