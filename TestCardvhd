@@ -306,7 +306,7 @@ BEGIN
 	       card_lockC <= '1';
 	       
 	   Elsif (hit='1')  then
-	       IF(hits = '0')AND(flip = '1')then
+	       IF(flip = '1')then
 	           IF(card_flip1 = '0') AND (card_lock1 = '0') then
 	               card_lock1 <= '1';
 	               hits <='1';
@@ -344,7 +344,7 @@ BEGIN
 	               card_lockC <= '1';
 	               hits <='1';
 	           END IF;
-	       ELSIF(hits = '1')AND(flop = '1')then
+	       ELSIF(flop = '1')then
 	           IF(card_flip1 = '0') AND (card_lock1 = '0')then
 	               IF(card_lock2 = '0') then	
 	                   hits <='0';
@@ -484,6 +484,7 @@ BEGIN
 	           green <= '0';
 	           blue <= '0';
 	       end if;
+	       
 	    elsif (card_on2 = '1') then --CARD 2 BLUE+GREEN FLIP
 	          IF (card_lock2 = '1')then
 		        red <= '0';
