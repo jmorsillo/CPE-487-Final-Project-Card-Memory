@@ -357,7 +357,9 @@ BEGIN
 	           END IF;
 	           
 	       END IF;
-	       Elsif(RESET = '1') then
+
+	   END IF;
+	   if(RESET = '1') then
 	       card_lock1 <= '0';
 	       card_lock2 <= '0';
 	       card_lock3 <= '0';
@@ -370,7 +372,7 @@ BEGIN
 	       card_lock8 <= '0';
 	       card_lock9 <= '0';
 	       card_lockC <= '0';
-	   END IF;
+	   end if;
 	   END PROCESS;
 	
 	COLOR : PROCESS (card_on1, card_on2, card_on3, card_on4, card_on5, card_on6, card_on7, card_on8, card_on9, card_onA, card_onB, card_onC, card_lock1, card_lock2, card_lock3, card_lock4, card_lock5, card_lock6, card_lock7, card_lock8, card_lock9, card_lockA, card_lockB, card_lockC, card_flip1, card_flip2, card_flip3, card_flip4, card_flip5, card_flip6, card_flip7, card_flip8, card_flip9, card_flipA, card_flipB, card_flipC, RESET) IS
