@@ -342,6 +342,8 @@ BEGIN
 	           ELSIF(card_flipC = '0') AND (card_lockC = '0') then
 	               card_lockC <= '1';
 	               hits <='1';
+	           else
+	               hits <='0';
 	           END IF;
 	   ELSIF(flop = '1')then
 	           IF(card_flip1 = '0') AND (card_lock1 = '0')then
@@ -453,8 +455,11 @@ BEGIN
 	                   hits <= '0';
 	                   game_complete6 <= '1';
 	               end if;
+	           else
+	               hits<='1';
 	           END IF;
-	           
+	       else
+	           fail <='0';
 	       END IF;
 	 
 	   END PROCESS;
