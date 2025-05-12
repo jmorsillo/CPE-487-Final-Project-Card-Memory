@@ -50,7 +50,7 @@ ARCHITECTURE Behavioral OF vga_top IS
     Signal flipA : std_logic := '1';
     Signal flipB : std_logic := '1';
     Signal flipC : std_logic := '1';
-    
+    Signal RESET : std_logic := '0';
     
     COMPONENT card IS
         PORT (
@@ -160,7 +160,7 @@ BEGIN
         card_flipC => flipC,
         
         hit => hit,
-        RESET => btnc,
+        RESET => RESET,
         
         red       => S_red, 
         green     => S_green, 
@@ -243,6 +243,7 @@ begin
     when "0000001000000000" => flipA <= '0'; hit <='1';
     when "0000010000000000" => flipB <= '0'; hit <='1';
     when "0000100000000000" => flipC <= '0'; hit <='1';
+    when "1000000000000000" => RESET <= '1'; 
     
     when others => 
     flip1 <= '1';
@@ -258,6 +259,7 @@ begin
     flipB <= '1';
     flipC <= '1';
     hit <= '0';
+    RESET <= '0';
     end case;
 
  
