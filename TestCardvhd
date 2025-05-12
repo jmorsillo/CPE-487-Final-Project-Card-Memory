@@ -252,96 +252,31 @@ BEGIN
 	wait until (rising_edge(hit));
 	   flip <= NOT(flip);
 	   flop <= NOT(flop);
-	END PROCESS;
-	
-	Game : PROCESS
-	begin
-	wait until (rising_edge(v_sync));
-	   If (RESET = '1') then
-	       card_lock1 <= '0';
-	       card_lock2 <= '0';
-	       card_lock3 <= '0';
-	       card_lockA <= '0';
-	       card_lock4 <= '0';
-	       card_lock5 <= '0';
-	       card_lock6 <= '0';
-	       card_lockB <= '0';
-	       card_lock7 <= '0';
-	       card_lock8 <= '0';
-	       card_lock9 <= '0';
-	       card_lockC <= '0';
-	       
-	   Elsif(fail <= '1') then
-	       card_lock1 <= '0';
-	       card_lock2 <= '0';
-	       card_lock3 <= '0';
-	       card_lockA <= '0';
-	       card_lock4 <= '0';
-	       card_lock5 <= '0';
-	       card_lock6 <= '0';
-	       card_lockB <= '0';
-	       card_lock7 <= '0';
-	       card_lock8 <= '0';
-	       card_lock9 <= '0';
-	       card_lockC <= '0';
-	       fail <= '0';
-	       
-	   Elsif(game_complete1 <= '1') then
-	       card_lock1 <= '1';
-	       card_lock2 <= '1';
-	   Elsif(game_complete2 <= '1') then
-	       card_lock3 <= '1';
-	       card_lockA <= '1';
-	   Elsif(game_complete3 <= '1') then
-	       card_lock4 <= '1';
-	       card_lock5 <= '1';
-	   Elsif(game_complete4 <= '1') then
-	       card_lock6 <= '1';
-	       card_lockB <= '1';
-	   Elsif(game_complete5 <= '1') then
-	       card_lock7 <= '1';
-	       card_lock8 <= '1';
-	   Elsif(game_complete6 <= '1') then
-	       card_lock9 <= '1';
-	       card_lockC <= '1';
-	       
-	   elsif(flip = '1')then
+	   If(flip = '1')then
 	           IF(card_flip1 = '0') AND (card_lock1 = '0') then
 	               card_lock1 <= '1';
-	               hits <='1';
 	           ELSIF(card_flip2 = '0') AND (card_lock2 = '0') then
 	               card_lock2 <= '1';
-	               hits <='1';
 	           ELSIF(card_flip3 = '0') AND (card_lock3 = '0') then
 	               card_lock3 <= '1';
-	               hits <='1';
 	           ELSIF(card_flipA = '0') AND (card_lockA = '0') then
 	               card_lockA <= '1';
-	               hits <='1';
 	           ELSIF(card_flip4 = '0') AND (card_lock4 = '0') then
 	               card_lock4 <= '1';
-	               hits <='1';
 	           ELSIF(card_flip5 = '0') AND (card_lock5 = '0') then
 	               card_lock5 <= '1';
-	               hits <='1';
 	           ELSIF(card_flip6 = '0') AND (card_lock6 = '0') then
 	               card_lock6 <= '1';
-	               hits <='1';
 	           ELSIF(card_flipB = '0') AND (card_lockB = '0') then
 	               card_lockB <= '1';
-	               hits <='1';
 	           ELSIF(card_flip7 = '0') AND (card_lock7 = '0') then
 	               card_lock7 <= '1';
-	               hits <='1';
 	           ELSIF(card_flip8 = '0') AND (card_lock8 = '0') then
 	               card_lock8 <= '1';
-	               hits <='1'; 
 	           ELSIF(card_flip9 = '0') AND (card_lock9 = '0') then
 	               card_lock9 <= '1';
-	               hits <='1';
 	           ELSIF(card_flipC = '0') AND (card_lockC = '0') then
 	               card_lockC <= '1';
-	               hits <='1';
 	           else
 	               hits <='0';
 	           END IF;
@@ -458,6 +393,61 @@ BEGIN
 	           else
 	               hits<='1';
 	           END IF;
+	   End if;
+	END PROCESS;
+	
+	Game : PROCESS
+	begin
+	wait until (rising_edge(v_sync));
+	   If (RESET = '1') then
+	       card_lock1 <= '0';
+	       card_lock2 <= '0';
+	       card_lock3 <= '0';
+	       card_lockA <= '0';
+	       card_lock4 <= '0';
+	       card_lock5 <= '0';
+	       card_lock6 <= '0';
+	       card_lockB <= '0';
+	       card_lock7 <= '0';
+	       card_lock8 <= '0';
+	       card_lock9 <= '0';
+	       card_lockC <= '0';
+	       
+	   Elsif(fail <= '1') then
+	       card_lock1 <= '0';
+	       card_lock2 <= '0';
+	       card_lock3 <= '0';
+	       card_lockA <= '0';
+	       card_lock4 <= '0';
+	       card_lock5 <= '0';
+	       card_lock6 <= '0';
+	       card_lockB <= '0';
+	       card_lock7 <= '0';
+	       card_lock8 <= '0';
+	       card_lock9 <= '0';
+	       card_lockC <= '0';
+	       fail <= '0';
+	       
+	   Elsif(game_complete1 <= '1') then
+	       card_lock1 <= '1';
+	       card_lock2 <= '1';
+	   Elsif(game_complete2 <= '1') then
+	       card_lock3 <= '1';
+	       card_lockA <= '1';
+	   Elsif(game_complete3 <= '1') then
+	       card_lock4 <= '1';
+	       card_lock5 <= '1';
+	   Elsif(game_complete4 <= '1') then
+	       card_lock6 <= '1';
+	       card_lockB <= '1';
+	   Elsif(game_complete5 <= '1') then
+	       card_lock7 <= '1';
+	       card_lock8 <= '1';
+	   Elsif(game_complete6 <= '1') then
+	       card_lock9 <= '1';
+	       card_lockC <= '1';
+	       
+	   
 	       else
 	           fail <='0';
 	       END IF;
@@ -471,10 +461,10 @@ BEGIN
 		        red <= '0';
 		        green <= '1';
 		        blue <= '1';
-		      Else
-				red <= card_flip1; 
-	            green <= NOT card_flip1;
-	            blue  <= NOT card_flip1;
+		      Elsif (card_lock1 = '0') then
+				red <= '1'; 
+	            green <= '0';
+	            blue  <= '0';
 	          end if;
 	          
 	    elsif (card_onTEST = '1') then
@@ -493,59 +483,59 @@ BEGIN
 		        red <= '0';
 		        green <= '1';
 		        blue <= '1';
-		      Else
-				red <= card_flip2; 
-	            green <= NOT card_flip2;
-	            blue  <= NOT card_flip2;
+		      Elsif (card_lock2 = '0') then
+				red <= '1'; 
+	            green <= '0';
+	            blue  <= '0';
 	          end if;
 	    elsif (card_on3 = '1') then --CARD 3 BLUE FLIP
 	           IF (card_lock3 = '1')then
 	            red <= '0';
 	            green <= '0';
 	            blue <= '1';
-	           Else
-	            red <= card_flip3; 
+	           Elsif (card_lock3 = '0') then
+	            red <= '1'; 
 	            green <= '0';
-	            blue  <= NOT card_flip3;
+	            blue  <= '0';
 	           end if;
 	    elsif (card_onA = '1') then --CARD A BLUE FLIP
 	           IF (card_lockA = '1')then
 	            red <= '0';
 	            green <= '0';
 	            blue <= '1';
-	           Else
-	            red <= card_flipA; 
+	           Elsif (card_lockA = '0') then
+	            red <= '1'; 
 	            green <= '0';
-	            blue  <= NOT card_flipA;
+	            blue  <= '0';
 	           end if;
 	    elsif (card_on4 = '1') then --CARD 4 RED+BLUE FLIP
 	           IF (card_lock4 = '1')then
 	            red <= '1'; 
 	            green <= '0';
 	            blue  <= '1';
-	           Else
+	           Elsif (card_lock4 = '0') then
 	            red <= '1';
 	            green <= '0';
-	            blue  <= NOT card_flip4;
+	            blue  <= '0';
 	           end if;
 	    elsif (card_on5 = '1') then --CARD 5 RED+BLUE FLIP
 	           IF (card_lock5 = '1')then
 	            red <= '1'; 
 	            green <= '0';
 	            blue  <= '1';
-	           Else
+	           Elsif (card_lock5 = '0') then
 	            red <= '1';
 	            green <= '0';
-	            blue  <= NOT card_flip5;
+	            blue  <= '0';
 	           end if;
 	    elsif (card_on6 = '1') then --CARD 6 GREEN FLIP
 	           IF (card_lock6 = '1')then
 	            red <= '0';
 	            green <= '1';
 	            blue  <= '0';
-	           Else	  	           
-	            red <= card_flip6; 
-	            green <= NOT card_flip6;
+	           Elsif (card_lock6 = '0') then	  	           
+	            red <= '1'; 
+	            green <= '0';
 	            blue  <= '0';
 	           end if;
 	    elsif (card_onB = '1') then --CARD B GREEN FLIP
@@ -553,9 +543,9 @@ BEGIN
 	            red <= '0';
 	            green <= '1';
 	            blue  <= '0';
-	           Else	  	           
-	            red <= card_flipB; 
-	            green <= NOT card_flipB;
+	           Elsif (card_lockB = '0') then  	           
+	            red <= '1'; 
+	            green <= '0';
 	            blue  <= '0';
 	           end if;
 	    elsif (card_on7 = '1') then --CARD 7 RED+GREEN FLIP
@@ -563,9 +553,9 @@ BEGIN
 	            red <= '1';
 	            green <= '1';
 	            blue  <= '0';
-	           Else
+	           Elsif (card_lock7 = '0') then
 	            red <= '1'; 
-	            green <= NOT card_flip7;
+	            green <= '0';
 	            blue  <= '0';
 	           end if;
 	    elsif (card_on8 = '1') then --CARD 8 RED+GREEN FLIP
@@ -573,9 +563,9 @@ BEGIN
 	            red <= '1';
 	            green <= '1';
 	            blue  <= '0';
-	           Else
+	           Elsif (card_lock8 = '0') then
 	            red <= '1'; 
-	            green <= NOT card_flip8;
+	            green <= '0';
 	            blue  <= '0';
 	           end if;
 	    elsif (card_on9 = '1') then --CARD 9 NO COLOR? FLIP
@@ -583,8 +573,8 @@ BEGIN
 	            red <= '0';
 	            green <= '0';
 	            blue  <= '0';
-	           Else
-	            red <= card_flip9; 
+	           Elsif (card_lock9 = '0') then
+	            red <= '1'; 
 	            green <= '0';
 	            blue  <= '0';
 	           end if;
@@ -593,8 +583,8 @@ BEGIN
 	            red <= '0';
 	            green <= '0';
 	            blue  <= '0';
-	           Else
-	            red <= card_flipC; 
+	           Elsif (card_lockC = '0') then
+	            red <= '1'; 
 	            green <= '0';
 	            blue  <= '0';
 	           end if;
