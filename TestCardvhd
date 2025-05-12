@@ -272,7 +272,7 @@ BEGIN
 	       card_lock9 <= '0';
 	       card_lockC <= '0';
 	       
-	   Elsif(fail <= '1') then
+	   Elsif(fail = '1') then
 	       card_lock1 <= '0';
 	       card_lock2 <= '0';
 	       card_lock3 <= '0';
