@@ -258,6 +258,7 @@ BEGIN
 	       card_lock8 <= '0';
 	       card_lock9 <= '0';
 	       card_lockC <= '0';
+	       fail <= '0';
 	       
 	   Elsif(game_complete1 <= '1') then
 	       card_lock1 <= '1';
