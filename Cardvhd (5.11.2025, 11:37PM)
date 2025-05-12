@@ -70,13 +70,14 @@ ARCHITECTURE Behavioral OF card IS
 	
     SIGNAL hits: std_logic := '1';
 	
-	SIGNAL game_NONE_complete : STD_LOGIC := '0'; 
-	SIGNAL game_B_complete : STD_LOGIC := '0';
-	SIGNAL game_G_complete : STD_LOGIC := '0';
-	SIGNAL game_RB_complete : STD_LOGIC := '0';
-	SIGNAL game_RG_complete : STD_LOGIC := '0';
-	SIGNAL game_BG_complete : STD_LOGIC := '0';
+	SIGNAL game_complete1 : STD_LOGIC := '0'; 
+	SIGNAL game_complete2 : STD_LOGIC := '0';
+	SIGNAL game_complete3 : STD_LOGIC := '0';
+	SIGNAL game_complete4 : STD_LOGIC := '0';
+	SIGNAL game_complete5 : STD_LOGIC := '0';
+	SIGNAL game_complete6 : STD_LOGIC := '0';
 	
+	SIGNAL fail : STD_LOGIC := '0';
 	
 BEGIN
 --	red <= '1'; -- color setup for red card on white background (face down card)
@@ -225,9 +226,10 @@ BEGIN
 			card_onC <= '0';
 		END IF;
 		END PROCESS;
-		
-	Game : PROCESS (hit, hits, card_flip1, card_flip2, card_flip3, card_flip4, card_flip5, card_flip6, card_flip7, card_flip8, card_flip9, card_flipA, card_flipB, card_flipC, card_lock1, card_lock2, card_lock3, card_lock4, card_lock5, card_lock6, card_lock7, card_lock8, card_lock9, card_lockA, card_lockB, card_lockC, RESET) IS 
+	
+	Game : process IS 
 	begin  
+	wait until (rising_edge(v_sync));
 	   If (RESET = '1') then
 	       card_lock1 <= '0';
 	       card_lock2 <= '0';
@@ -241,6 +243,12 @@ BEGIN
 	       card_lock8 <= '0';
 	       card_lock9 <= '0';
 	       card_lockC <= '0';
+	       game_complete1 <= '0';
+	       game_complete2 <= '0';
+	       game_complete3 <= '0';
+	       game_complete4 <= '0';
+	       game_complete5 <= '0';
+	       game_complete6 <= '0';
 	   Elsif (rising_edge(hit))  then
 	       IF(hits = '0')then
 	           IF(card_flip1 = '0') AND (card_lock1 = '0') then
@@ -284,87 +292,111 @@ BEGIN
 	           IF(card_flip1 = '0') AND (card_lock1 = '0')then
 	               IF(card_lock2 = '0') then	
 	                   hits <='0';
+	                   fail <='1';
 	               else
 	                   card_lock1 <= '1';
 	                   hits <= '0';
+	                   game_complete1 <= '1';
 	               end if;
 	               
 	           ELSIF(card_flip2 = '0') AND (card_lock2 = '0') then
 	               IF(card_lock1 = '0') then	      
 	                   hits <='0';
+	                   fail <='1';
 	               else
 	                   card_lock2 <= '1';
 	                   hits <= '0';
+	                   game_complete1 <= '1';
 	               end if;
 	           ELSIF(card_flip3 = '0') AND (card_lock3 = '0') then
 	               IF(card_lockA = '0') then	
 	                   hits <='0';
+	                   fail <='1';
 	               else
 	                   card_lock3 <= '1';
 	                   hits <= '0';
+	                   game_complete2 <= '1';
 	               end if;
 	           ELSIF(card_flipA = '0') AND (card_lockA = '0') then
 	               IF(card_lock3 = '0') then	
 	                   hits <='0';
+	                   fail <='1';
 	               else
 	                   card_lockA <= '1';
 	                   hits <= '0';
+	                   game_complete2 <= '1';
 	               end if;
 	           ELSIF(card_flip4 = '0') AND (card_lock4 = '0') then
 	               IF(card_lock5 = '0') then	      
 	                   hits <='0';
+	                   fail <='1';
 	               else
 	                   card_lock4 <= '1';
 	                   hits <= '0';
+	                   game_complete3 <= '1';
 	               end if;
 	           ELSIF(card_flip5 = '0') AND (card_lock5 = '0') then
 	               IF(card_lock4 = '0') then	      
 	                   hits <='0';
+	                   fail <='1';
 	               else
 	                   card_lock5 <= '1';
 	                   hits <= '0';
+	                   game_complete3 <= '1';
 	               end if;
 	           ELSIF(card_flip6 = '0') AND (card_lock6 = '0') then
 	               IF(card_lockB = '0') then	      
 	                   hits <='0';
+	                   fail <='1';
 	               else
 	                   card_lock6 <= '1';
 	                   hits <= '0';
+	                   game_complete4 <= '1';
 	               end if;
 	           ELSIF(card_flipB = '0') AND (card_lockB = '0') then
 	               IF(card_lock6 = '0') then	      
 	                   hits <='0';
+	                   fail <='1';
 	               else
 	                   card_lockB <= '1';
 	                   hits <= '0';
+	                   game_complete4 <= '1';
 	               end if;
 	           ELSIF(card_flip7 = '0') AND (card_lock7 = '0') then
 	               IF(card_lock8 = '0') then	      
 	                   hits <='0';
+	                   fail <='1';
 	               else
 	                   card_lock7 <= '1';
 	                   hits <= '0';
+	                   game_complete5 <= '1';
 	               end if;
 	           ELSIF(card_flip8 = '0') AND (card_lock8 = '0') then
 	               IF(card_lock7 = '0') then	      
 	                   hits <='0';
+	                   fail <='1';
 	               else
 	                   card_lock8 <= '1';
 	                   hits <= '0';
+	                   game_complete5 <= '1';
 	               end if;
 	           ELSIF(card_flip9 = '0') AND (card_lock9 = '0') then
 	               IF(card_lockC = '0') then	      
 	                   hits <='0';
+	                   fail <='1';
 	               else
 	                   card_lock9 <= '1';
 	                   hits <= '0';
+	                   game_complete6 <= '1';
 	               end if;
 	           ELSIF(card_flipC = '0') AND (card_lockC = '0') then
 	               IF(card_lock9 = '0') then	      
 	                   hits <='0';
+	                   fail <='1';
 	               else
 	                   card_lockC <= '1';
 	                   hits <= '0';
+	                   game_complete6 <= '1';
 	               end if;
 	           END IF;
 	           
@@ -372,6 +404,42 @@ BEGIN
 	   
 	   END IF;
 	   END PROCESS;
+	
+	COMPLETEfail : PROCESS (fail, game_complete1, game_complete2, game_complete3, game_complete4, game_complete5, game_complete6) is
+	begin
+	   IF(fail <= '1') then
+	       card_lock1 <= '0';
+	       card_lock2 <= '0';
+	       card_lock3 <= '0';
+	       card_lockA <= '0';
+	       card_lock4 <= '0';
+	       card_lock5 <= '0';
+	       card_lock6 <= '0';
+	       card_lockB <= '0';
+	       card_lock7 <= '0';
+	       card_lock8 <= '0';
+	       card_lock9 <= '0';
+	       card_lockC <= '0';
+	   Elsif(game_complete1 <= '1') then
+	       card_lock1 <= '1';
+	       card_lock2 <= '1';
+	   Elsif(game_complete2 <= '1') then
+	       card_lock3 <= '1';
+	       card_lockA <= '1';
+	   Elsif(game_complete3 <= '1') then
+	       card_lock4 <= '1';
+	       card_lock5 <= '1';
+	   Elsif(game_complete4 <= '1') then
+	       card_lock6 <= '1';
+	       card_lockB <= '1';
+	   Elsif(game_complete5 <= '1') then
+	       card_lock7 <= '1';
+	       card_lock8 <= '1';
+	   Elsif(game_complete6 <= '1') then
+	       card_lock9 <= '1';
+	       card_lockC <= '1';                  
+	   end if;
+	END PROCESS;
 	
 	COLOR : PROCESS (card_on1, card_on2, card_on3, card_on4, card_on5, card_on6, card_on7, card_on8, card_on9, card_onA, card_onB, card_onC, card_lock1, card_lock2, card_lock3, card_lock4, card_lock5, card_lock6, card_lock7, card_lock8, card_lock9, card_lockA, card_lockB, card_lockC, card_flip1, card_flip2, card_flip3, card_flip4, card_flip5, card_flip6, card_flip7, card_flip8, card_flip9, card_flipA, card_flipB, card_flipC, RESET) IS
 	BEGIN
