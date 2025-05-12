@@ -247,19 +247,17 @@ BEGIN
 		END PROCESS;
 	
 	
-	--Phase : PROCESS 
-	--begin
-	--wait until (rising_edge(hit));
-	--   flip <= NOT(flip);
-	--   flop <= NOT(flop);
-	-- 
-	--END PROCESS;
-	
-	Game : PROCESS
+	Phase : PROCESS 
 	begin
 	wait until (rising_edge(hit));
 	   flip <= NOT(flip);
 	   flop <= NOT(flop);
+	 
+	END PROCESS;
+	
+	Game : PROCESS
+	begin
+	wait until (rising_edge(v_sync));
 	   If (RESET = '1') then
 	       card_lock1 <= '0';
 	       card_lock2 <= '0';
