@@ -17,7 +17,7 @@ This lab utilizes the Nexys A7-100T FPGA board coded with VHDL to create a card 
  
 - The **card** module creates the actual cards that will be displayed using carddraw 1 -> C processes then runs the game logic in 2 individual processes (one to determine whether the 1st or 2nd card is being picked, and another for all the logic of the game) and finally handles the coloring in a new Color process
   
-[Blank Canvas.pdf](https://github.com/user-attachments/files/20199175/Blank.Canvas.pdf)
+![Blank Canvas](https://github.com/user-attachments/assets/4d053dd5-cf3c-408f-86ce-021652bcf9d7)
 
   - The card module starts by taking all the various inputs from vga_top to start making a basis for the game, even before any logic of playing the game takes place, like the x and y coordinates to each card, syncronization variables, and active inputs from the player that go through vga_top such as a "hit" variable which detects when any input is "hit" in, and a "RESET" variable too, which is activated when we flip the 15th switch (or the first one if you look left right), the pixel row and column the VGA section is currently on (used later for visual display), and all the flip signals which tell the code what card the player has chosen to flip over.
   - The only output or exports of card.vhd is the red green and blue values for the VGA display, which logic is gotten into later when displaying the cards
