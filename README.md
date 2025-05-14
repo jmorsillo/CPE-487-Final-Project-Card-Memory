@@ -13,7 +13,7 @@ This lab utilizes the Nexys A7-100T FPGA board coded with VHDL to create a card 
 - The top of the hierarchy is the **vga_top** module which contains all of the board inputs which are mapped throughout the project **card** and **vga_sync** modules, and the logic used to flip the cards using the onboard switches.
 
    - Pretty much all the code in the VGA_top is the same as lab 3 in terms of getting the VGA to work with a clock and such, inputs and outputs of that too
-   - what we added was a case statement to detect what switches were flipped, and what variables to assign to them
+   - what we added was a case statement to detect what switches were flipped, and what variables to assign to them, and also makes hit variable 1 upon use
    - We also initialized signals like card x and y signals in the vga top section which serve as the centers for the cards in the card.vhd section
    - Most of the heavy lifting and explaining is done in card.vhd, Vga top is mainly for general purpose all around clock and stuff inclusion
  
