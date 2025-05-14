@@ -6,13 +6,16 @@ USE IEEE.STD_LOGIC_ARITH.ALL;
 ENTITY vga_top IS
     PORT (
         clk_in    : IN STD_LOGIC;
+        SW : IN STD_LOGIC_VECTOR (15 downto 0);
         KB_row : IN STD_LOGIC_VECTOR (4 downto 1);
+        btnc : IN STD_LOGIC;
         KB_col : OUT STD_LOGIC_VECTOR (4 downto 1);
         vga_red : OUT STD_LOGIC_VECTOR (2 downto 0);
         vga_green : OUT STD_LOGIC_VECTOR (2 DOWNTO 0);
         vga_blue  : OUT STD_LOGIC_VECTOR (1 DOWNTO 0);
         vga_hsync : OUT STD_LOGIC;
         vga_vsync : OUT STD_LOGIC
+        
     );
 END vga_top;
 
@@ -23,9 +26,9 @@ ARCHITECTURE Behavioral OF vga_top IS
     SIGNAL S_vsync : STD_LOGIC;
     SIGNAL S_pixel_row, S_pixel_col : STD_LOGIC_VECTOR (10 DOWNTO 0);
     
-    Constant cy1 : std_logic_vector(10 downto 0) := conv_std_logic_vector(150,11);
+    Constant cy1 : std_logic_vector(10 downto 0) := conv_std_logic_vector(100,11);
     Constant cy2 : std_logic_vector(10 downto 0) := conv_std_logic_vector(300,11);
-    Constant cy3 : std_logic_vector(10 downto 0) := conv_std_logic_vector(450,11);
+    Constant cy3 : std_logic_vector(10 downto 0) := conv_std_logic_vector(500,11);
     
     Constant cx1 : std_logic_vector(10 downto 0) := conv_std_logic_vector(100,11);
     Constant cx2 : std_logic_vector(10 downto 0) := conv_std_logic_vector(300,11);
@@ -33,7 +36,7 @@ ARCHITECTURE Behavioral OF vga_top IS
     Constant cx4 : std_logic_vector(10 downto 0) := conv_std_logic_vector(700,11);
     
     Signal value : STD_LOGIC_VECTOR (3 DOWNTO 0);
-	Signal hit : STD_LOGIC;
+	Signal hit : STD_LOGIC := '0';
 	
 	Signal flip1 : std_logic := '1';
     Signal flip2 : std_logic := '1';
@@ -47,16 +50,40 @@ ARCHITECTURE Behavioral OF vga_top IS
     Signal flipA : std_logic := '1';
     Signal flipB : std_logic := '1';
     Signal flipC : std_logic := '1';
-    
+    Signal RESET : std_logic := '0';
     
     COMPONENT card IS
         PORT (
             v_sync : IN STD_LOGIC;
             pixel_row : IN STD_LOGIC_VECTOR(10 DOWNTO 0);
             pixel_col : IN STD_LOGIC_VECTOR(10 DOWNTO 0);
-            card_x : IN STD_LOGIC_VECTOR(10 DOWNTO 0);
-		    card_y : IN STD_LOGIC_VECTOR(10 DOWNTO 0);
-		    card_flip : IN STD_LOGIC;
+		    
+		    card_x1 : IN STD_LOGIC_VECTOR(10 DOWNTO 0);
+		    card_y1 : IN STD_LOGIC_VECTOR(10 DOWNTO 0);
+		    card_flip1 : IN STD_LOGIC;
+		    
+		    card_x2 : IN STD_LOGIC_VECTOR(10 DOWNTO 0);
+		    card_y2 : IN STD_LOGIC_VECTOR(10 DOWNTO 0);
+		    card_flip2 : IN STD_LOGIC;
+		    
+		    card_x3 : IN STD_LOGIC_VECTOR(10 DOWNTO 0);
+		    card_y3 : IN STD_LOGIC_VECTOR(10 DOWNTO 0);
+		    card_flip3 : IN STD_LOGIC;
+		    
+		    card_x4 : IN STD_LOGIC_VECTOR(10 DOWNTO 0);
+		    card_flip4 : IN STD_LOGIC;
+		    card_flip5 : IN STD_LOGIC;
+		    card_flip6 : IN STD_LOGIC;
+		    card_flip7 : IN STD_LOGIC;
+		    card_flip8 : IN STD_LOGIC;
+		    card_flip9 : IN STD_LOGIC;
+		    card_flipA : IN STD_LOGIC;
+		    card_flipB : IN STD_LOGIC;
+		    card_flipC : IN STD_LOGIC;
+		    
+		    hit : IN STD_LOGIC;
+		    RESET : IN STD_LOGIC;
+		    
             red : OUT STD_LOGIC;
             green : OUT STD_LOGIC;
             blue : OUT STD_LOGIC
@@ -78,14 +105,14 @@ ARCHITECTURE Behavioral OF vga_top IS
         );
     END COMPONENT;
     
-    COMPONENT keypad IS
-	PORT (
-		samp_ck : IN STD_LOGIC; -- clock to strobe columns
-		col : OUT STD_LOGIC_VECTOR (4 DOWNTO 1); -- output column lines
-		row : IN STD_LOGIC_VECTOR (4 DOWNTO 1); -- input row lines
-		value : OUT STD_LOGIC_VECTOR (3 DOWNTO 0); -- hex value of key depressed
-	    hit : OUT STD_LOGIC); -- indicates when a key has been pressed
-    END COMPONENT;
+--    COMPONENT keypad IS
+--	PORT (
+--		samp_ck : IN STD_LOGIC; -- clock to strobe columns
+--		col : OUT STD_LOGIC_VECTOR (4 DOWNTO 1); -- output column lines
+--		row : IN STD_LOGIC_VECTOR (4 DOWNTO 1); -- input row lines
+--		value : OUT STD_LOGIC_VECTOR (3 DOWNTO 0); -- hex value of key depressed
+--	    hit : OUT STD_LOGIC); -- indicates when a key has been pressed
+--    END COMPONENT;
     
     component clk_wiz_0 is
     port (
@@ -102,163 +129,43 @@ BEGIN
     vga_green(1 DOWNTO 0) <= "00";
     vga_blue(0) <= '0';
 
-    card1: card
+    cardgame: card
     PORT MAP(
         --instantiate ball component
         v_sync    => S_vsync, 
         pixel_row => S_pixel_row, 
         pixel_col => S_pixel_col, 
-        card_x    => cx1,
-        card_y    => cy1,
-        card_flip => flip1,
+        card_x1    => cx1,
+        card_y1    => cy1,
+        card_flip1 => flip1,
+        
+        card_x2    => cx2,
+        card_y2    => cy2,
+        card_flip2 => flip2,
+        
+        card_x3    => cx3,
+        card_y3    => cy3,
+        card_flip3 => flip3,
+        
+        card_x4    => cx4,
+        card_flip4 => flip4,
+        
+        card_flip5 => flip5,
+        card_flip6 => flip6,
+        card_flip7 => flip7,
+        card_flip8 => flip8,
+        card_flip9 => flip9,
+        card_flipA => flipA,
+        card_flipB => flipB,
+        card_flipC => flipC,
+        
+        hit => hit,
+        RESET => RESET,
+        
         red       => S_red, 
         green     => S_green, 
         blue      => S_blue
     );
-    card2: card
-    PORT MAP(
-        --instantiate ball component
-        v_sync    => S_vsync, 
-        pixel_row => S_pixel_row, 
-        pixel_col => S_pixel_col, 
-        card_x    => cx2,
-        card_y    => cy1,
-        card_flip => flip2,
-        red       => S_red, 
-        green     => S_green, 
-        blue      => S_blue
-    );
-    card3: card
-    PORT MAP(
-        --instantiate ball component
-        v_sync    => S_vsync, 
-        pixel_row => S_pixel_row, 
-        pixel_col => S_pixel_col,
-        card_x    => cx3,
-        card_y    => cy1,
-        card_flip => flip3,
-        red       => S_red, 
-        green     => S_green, 
-        blue      => S_blue
-    );
-    card4: card
-    PORT MAP(
-        --instantiate ball component
-        v_sync    => S_vsync, 
-        pixel_row => S_pixel_row, 
-        pixel_col => S_pixel_col,
-        card_x    => cx1,
-        card_y    => cy2,
-        card_flip => flip4,
-        red       => S_red, 
-        green     => S_green, 
-        blue      => S_blue
-    );
-    card5: card
-    PORT MAP(
-        --instantiate ball component
-        v_sync    => S_vsync, 
-        pixel_row => S_pixel_row, 
-        pixel_col => S_pixel_col,
-        card_x    => cx2,
-        card_y    => cy2,
-        card_flip => flip5,
-        red       => S_red, 
-        green     => S_green, 
-        blue      => S_blue
-    );
-    card6: card
-    PORT MAP(
-        --instantiate ball component
-        v_sync    => S_vsync, 
-        pixel_row => S_pixel_row, 
-        pixel_col => S_pixel_col,
-        card_x    => cx3,
-        card_y    => cy2,
-        card_flip => flip6,
-        red       => S_red, 
-        green     => S_green, 
-        blue      => S_blue
-    );
-    card7: card
-    PORT MAP(
-        --instantiate ball component
-        v_sync    => S_vsync, 
-        pixel_row => S_pixel_row, 
-        pixel_col => S_pixel_col,
-        card_x    => cx1,
-        card_y    => cy3,
-        card_flip => flip7,
-        red       => S_red, 
-        green     => S_green, 
-        blue      => S_blue
-    );
-    card8: card
-    PORT MAP(
-        --instantiate ball component
-        v_sync    => S_vsync, 
-        pixel_row => S_pixel_row, 
-        pixel_col => S_pixel_col,
-        card_x    => cx2,
-        card_y    => cy3,
-        card_flip => flip8,
-        red       => S_red, 
-        green     => S_green, 
-        blue      => S_blue
-    );
-    card9: card
-    PORT MAP(
-        --instantiate ball component
-        v_sync    => S_vsync, 
-        pixel_row => S_pixel_row, 
-        pixel_col => S_pixel_col,
-        card_x    => cx3,
-        card_y    => cy3,
-        card_flip => flip9,
-        red       => S_red, 
-        green     => S_green, 
-        blue      => S_blue
-    );
-    cardA: card
-    PORT MAP(
-        --instantiate ball component
-        v_sync    => S_vsync, 
-        pixel_row => S_pixel_row, 
-        pixel_col => S_pixel_col,
-        card_x    => cx4,
-        card_y    => cy1,
-        card_flip => flipA,
-        red       => S_red, 
-        green     => S_green, 
-        blue      => S_blue
-    );
-    cardB: card
-    PORT MAP(
-        --instantiate ball component
-        v_sync    => S_vsync, 
-        pixel_row => S_pixel_row, 
-        pixel_col => S_pixel_col,
-        card_x    => cx4,
-        card_y    => cy2,
-        card_flip => flipB,
-        red       => S_red, 
-        green     => S_green, 
-        blue      => S_blue
-    );
-    cardC: card
-    PORT MAP(
-        --instantiate ball component
-        v_sync    => S_vsync, 
-        pixel_row => S_pixel_row, 
-        pixel_col => S_pixel_col,
-        card_x    => cx4,
-        card_y    => cy3,
-        card_flip => flipC,
-        red       => S_red, 
-        green     => S_green, 
-        blue      => S_blue
-    );
-
 
     vga_driver : vga_sync
     PORT MAP(
@@ -277,14 +184,14 @@ BEGIN
     );
     vga_vsync <= S_vsync; --connect output vsync
     
-    kp: keypad
-    port map(
-        samp_ck        => pxl_clk,
-	    col            => KB_col,
-	    row            => KB_row,
-        value          => value,
-	    hit            => hit
-	    );
+--    kp: keypad
+--    port map(
+--        samp_ck        => pxl_clk,
+--	    col            => KB_col,
+--	    row            => KB_row,
+--        value          => value,
+--	    hit            => hit
+--	    );
 	    
     clk_wiz_0_inst : clk_wiz_0 
     port map (
@@ -295,19 +202,49 @@ BEGIN
 Process (flip1, flip2, flip3, flip4, flip5, flip6, flip7, flip8, flip9, flipA, flipB, flipC, hit, value)
 begin
 
-case hit & value is
-    when "10001" => flip1 <= '0';
-    when "10010" => flip2 <= '0';
-    when "10011" => flip3 <= '0';
-    when "10100" => flip4 <= '0';
-    when "10101" => flip5 <= '0';
-    when "10110" => flip6 <= '0';
-    when "10111" => flip7 <= '0';
-    when "11000" => flip8 <= '0';
-    when "11001" => flip9 <= '0';
-    when "11010" => flipA <= '0';
-    when "11011" => flipB <= '0';
-    when "11100" => flipC <= '0';
+--case hit & value is
+   -- when "10001" => flip1 <= '0';
+ --   when "10010" => flip2 <= '0';
+   -- when "10011" => flip3 <= '0';
+    --when "10100" => flip4 <= '0';
+--    when "10101" => flip5 <= '0';
+  --  when "10110" => flip6 <= '0';
+ --   when "10111" => flip7 <= '0';
+  --  when "11000" => flip8 <= '0';
+  --  when "11001" => flip9 <= '0';
+  --  when "11010" => flipA <= '0';
+  --  when "11011" => flipB <= '0';
+  --  when "11100" => flipC <= '0';
+  --  when others => 
+  --  flip1 <= '1';
+  --  flip2 <= '1';
+  --  flip3 <= '1';
+   -- flip4 <= '1';
+  --  flip5 <= '1';
+  --  flip6 <= '1';
+  --  flip7 <= '1';
+  --  flip8 <= '1'; 
+  --  flip9 <= '1';
+  --  flipA <= '1';
+  --  flipB <= '1';
+  --  flipC <= '1';
+  --  end case;
+    
+    case SW is
+    when "0000000000000001" => flip1 <= '0'; hit <='1';
+    when "0000000000000010" => flip2 <= '0'; hit <='1';
+    when "0000000000000100" => flip3 <= '0'; hit <='1';
+    when "0000000000001000" => flipA <= '0'; hit <='1';
+    when "0000000000010000" => flip4 <= '0'; hit <='1';
+    when "0000000000100000" => flip5 <= '0'; hit <='1';
+    when "0000000001000000" => flip6 <= '0'; hit <='1';
+    when "0000000010000000" => flipB <= '0'; hit <='1';
+    when "0000000100000000" => flip7 <= '0'; hit <='1';
+    when "0000001000000000" => flip8 <= '0'; hit <='1';
+    when "0000010000000000" => flip9 <= '0'; hit <='1';
+    when "0000100000000000" => flipC <= '0'; hit <='1';
+    when "1000000000000000" => RESET <= '1'; 
+    
     when others => 
     flip1 <= '1';
     flip2 <= '1';
@@ -316,14 +253,16 @@ case hit & value is
     flip5 <= '1';
     flip6 <= '1';
     flip7 <= '1';
-    flip8 <= '1';
+    flip8 <= '1'; 
     flip9 <= '1';
     flipA <= '1';
     flipB <= '1';
     flipC <= '1';
+    hit <= '0';
+    RESET <= '0';
     end case;
 
-
+ 
 END process;
     
 END Behavioral;
