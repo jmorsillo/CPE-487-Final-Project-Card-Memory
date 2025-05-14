@@ -32,7 +32,6 @@ ARCHITECTURE Behavioral OF vga_top IS
     Constant cx3 : std_logic_vector(10 downto 0) := conv_std_logic_vector(500,11);
     Constant cx4 : std_logic_vector(10 downto 0) := conv_std_logic_vector(700,11);
     
-    Signal value : STD_LOGIC_VECTOR (3 DOWNTO 0);
 	Signal hit : STD_LOGIC := '0';
 	
 	Signal flip1 : std_logic := '1';
