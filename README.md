@@ -96,3 +96,4 @@ https://github.com/user-attachments/assets/e82f6d74-b476-4938-8cf6-7c8e5ff6ae24
 - The project was started the week of April 27 and most work was done the end of the week of May 5th until the day of presentation on May 12th
 - The vga_top was the first thing to be finished then the card_memory and card files went through many iterations
 - This project originally inteded to use a keypad instead of the onboard switches but we had a faulty keypad and then ran out of time to implement it
+- Here is a link to a youtube playlist showing our demonstrations [Demonstration Playlist](https://youtube.com/playlist?list=PL9tjRsUiS-liD4sa81DPbxfG6mPmx9nwD&feature=shared)
