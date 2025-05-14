@@ -41,7 +41,10 @@ ENTITY card IS
 END card;
 
 ARCHITECTURE Behavioral OF card IS
+	--size of cards, 2x size is side length of the square
 	CONSTANT size  : INTEGER := 40;
+
+	--signals for whether current pixel is on an individual card
 	SIGNAL card_on1 : STD_LOGIC; 
 	SIGNAL card_on2 : STD_LOGIC;
 	SIGNAL card_on3 : STD_LOGIC;
@@ -54,7 +57,8 @@ ARCHITECTURE Behavioral OF card IS
 	SIGNAL card_onA : STD_LOGIC;
 	SIGNAL card_onB : STD_LOGIC;
 	SIGNAL card_onC : STD_LOGIC;
-	
+
+	--signals for when a card is flipped over, 0 for hidden, 1 for flipped over/exposed
 	SIGNAL card_lock1 : STD_LOGIC := '0'; 
 	SIGNAL card_lock2 : STD_LOGIC := '0';
 	SIGNAL card_lock3 : STD_LOGIC := '0';
@@ -67,57 +71,25 @@ ARCHITECTURE Behavioral OF card IS
 	SIGNAL card_lockA : STD_LOGIC := '0';
 	SIGNAL card_lockB : STD_LOGIC := '0';
 	SIGNAL card_lockC : STD_LOGIC := '0';
-	
-	SIGNAL nxcard_lock1 : STD_LOGIC := '0'; 
-	SIGNAL nxcard_lock2 : STD_LOGIC := '0';
-	SIGNAL nxcard_lock3 : STD_LOGIC := '0';
-	SIGNAL nxcard_lock4 : STD_LOGIC := '0';
-	SIGNAL nxcard_lock5 : STD_LOGIC := '0';
-	SIGNAL nxcard_lock6 : STD_LOGIC := '0';
-	SIGNAL nxcard_lock7 : STD_LOGIC := '0';
-	SIGNAL nxcard_lock8 : STD_LOGIC := '0';
-	SIGNAL nxcard_lock9 : STD_LOGIC := '0';
-	SIGNAL nxcard_lockA : STD_LOGIC := '0';
-	SIGNAL nxcard_lockB : STD_LOGIC := '0';
-	SIGNAL nxcard_lockC : STD_LOGIC := '0';
-	
-	SIGNAL mxcard_lock1 : STD_LOGIC := '0'; 
-	SIGNAL mxcard_lock2 : STD_LOGIC := '0';
-	SIGNAL mxcard_lock3 : STD_LOGIC := '0';
-	SIGNAL mxcard_lock4 : STD_LOGIC := '0';
-	SIGNAL mxcard_lock5 : STD_LOGIC := '0';
-	SIGNAL mxcard_lock6 : STD_LOGIC := '0';
-	SIGNAL mxcard_lock7 : STD_LOGIC := '0';
-	SIGNAL mxcard_lock8 : STD_LOGIC := '0';
-	SIGNAL mxcard_lock9 : STD_LOGIC := '0';
-	SIGNAL mxcard_lockA : STD_LOGIC := '0';
-	SIGNAL mxcard_lockB : STD_LOGIC := '0';
-	SIGNAL mxcard_lockC : STD_LOGIC := '0';
-	
-    SIGNAL hits: std_logic := '1';
-	
+
+	--signals to detect when a pair of cards has been found
 	SIGNAL game_complete1 : STD_LOGIC := '0'; 
 	SIGNAL game_complete2 : STD_LOGIC := '0';
 	SIGNAL game_complete3 : STD_LOGIC := '0';
 	SIGNAL game_complete4 : STD_LOGIC := '0';
 	SIGNAL game_complete5 : STD_LOGIC := '0';
 	SIGNAL game_complete6 : STD_LOGIC := '0';
-	
+
+	-- signal for detecting when an incorrect pair of cards has been chosen
 	SIGNAL fail : STD_LOGIC := '0';
+
+	-- signal for detecting input of the rising edge of turning on a switch
 	SIGNAL flip : STD_LOGIC := '0';
-	SIGNAL flop : STD_LOGIC := '1';
-	
+
+	-- test card in the corner so you can observe whats going on
 	SIGNAL xtest : std_logic_vector (10 downto 0) := conv_std_logic_vector(800,11);
 	SIGNAL ytest : std_logic_vector (10 downto 0) := conv_std_logic_vector(600,11);
 	SIGNAL card_ontest : STD_LOGIC := '0';
-	
-	SIGNAL nxgame_complete1 : STD_LOGIC := '0'; 
-	SIGNAL nxgame_complete2 : STD_LOGIC := '0';
-	SIGNAL nxgame_complete3 : STD_LOGIC := '0';
-	SIGNAL nxgame_complete4 : STD_LOGIC := '0';
-	SIGNAL nxgame_complete5 : STD_LOGIC := '0';
-	SIGNAL nxgame_complete6 : STD_LOGIC := '0';
-	
 	
 BEGIN
 --	red <= '1'; -- color setup for red card on white background (face down card)
@@ -278,70 +250,19 @@ BEGIN
 			card_onTEST <= '0';
 		END IF;
 		END PROCESS;
-		
+
+	-- process that detects when an input is given by rising edge of a hit variable which turns on when an input is given
 	Phase : PROCESS 
 	begin
 	wait until (rising_edge(hit));
 	   flip <= NOT(flip);
-	   --flop <= NOT(flop);
 	END PROCESS;
-	
---	Pair : PROCESS 
---	begin 
---	wait until (rising_edge(v_sync));
---	   nxgame_complete1 <= game_complete1;
---	   nxgame_complete2 <= game_complete2;
---	   nxgame_complete3 <= game_complete3;
---	   nxgame_complete4 <= game_complete4;
---	   nxgame_complete5 <= game_complete5;
---	   nxgame_complete6 <= game_complete6;
-	   
---	   If(nxgame_complete1 = '1') then
---	       nxcard_lock1 <= '1';
---	       nxcard_lock2 <= '1';
---	   end if;
---	   If(nxgame_complete2 = '1') then
---	       nxcard_lock3 <= '1';
---	       nxcard_lockA <= '1';
---	   end if;
---	   If(nxgame_complete3 = '1') then
---	       nxcard_lock4 <= '1';
---	       nxcard_lock5 <= '1';
---	   end if;
---	   If(nxgame_complete4 = '1') then
---	       nxcard_lock6 <= '1';
---	       nxcard_lockB <= '1';
---	   end if;
---	   If(nxgame_complete5 = '1') then
---	       nxcard_lock7 <= '1';
---	       nxcard_lock8 <= '1';
---	   end if;
---	   If(nxgame_complete6 = '1') then
---	       nxcard_lock9 <= '1';
---	       nxcard_lockC <= '1';
---	   end if;
---	END PROCESS;
-	
---	locking : PROCESS 
---	begin
---	wait until (rising_edge(v_sync));
---	   card_lock1 <= (mxcard_lock1 OR nxcard_lock1);
---	   card_lock2 <= (mxcard_lock2 OR nxcard_lock2);
---	   card_lock3 <= (mxcard_lock3 OR nxcard_lock3);
---	   card_lock4 <= (mxcard_lock4 OR nxcard_lock4);
---	   card_lock5 <= (mxcard_lock5 OR nxcard_lock5);
---	   card_lock6 <= (mxcard_lock6 OR nxcard_lock6);
---	   card_lock7 <= (mxcard_lock7 OR nxcard_lock7);
---	   card_lock8 <= (mxcard_lock8 OR nxcard_lock8);
---	   card_lock9 <= (mxcard_lock9 OR nxcard_lock9);
---	   card_lockA <= (mxcard_lockA OR nxcard_lockA);
---	   card_lockB <= (mxcard_lockB OR nxcard_lockB);
---	   card_lockC <= (mxcard_lockC OR nxcard_lockC);
---	END PROCESS;	
-	
+		
+	--Actual game is done here
 	Game : PROCESS 
 	begin
 	wait until (rising_edge(v_sync));
+	--Code intializing checking if any pairs are found on each cycle, and will show them if they are
 	   If(game_complete1 = '1') then
 	       card_lock1 <= '1';
 	       card_lock2 <= '1';
@@ -366,7 +287,8 @@ BEGIN
 	       card_lock9 <= '1';
 	       card_lockC <= '1';
 	   end if;
-	   
+
+	-- if you hit the reset button it reverts back to the start of the game
 	   If (RESET = '1') then
 	       card_lock1 <= '0';
 	       card_lock2 <= '0';
@@ -386,7 +308,8 @@ BEGIN
 	       game_complete4 <= '0';
 	       game_complete5 <= '0';
 	       game_complete6 <= '0';
-	       
+
+	-- if you choose a wrong pair of cards, it wipes every card, this is counter acted by the game_complete signals
 	   Elsif (fail = '1') then
 	       card_lock1 <= '0';
 	       card_lock2 <= '0';
@@ -403,6 +326,7 @@ BEGIN
 	       fail <= '0';
 	           
 	   elsif (hit='1')  then
+		-- First card decision
 	       IF(flip = '1')then
 	           IF(card_flip1 = '0') AND (card_lock1 = '0') then
 	               card_lock1 <= '1';
@@ -442,6 +366,7 @@ BEGIN
 	               card_lockC <= '1';
 	               hits <='1';
 	           END IF;
+		--second card decision, and will determine if you find a pair or fail a pair
 	       ELSIF(flip = '0')then
 	           IF(card_flip1 = '0') AND (card_lock1 = '0')then
 	               IF(card_lock2 = '0') then	
@@ -558,9 +483,11 @@ BEGIN
 	   
 	   END IF;
 	   END PROCESS;
-	
+
+	--displaying visuals process
 	COLOR : PROCESS (card_on1, card_on2, card_on3, card_on4, card_on5, card_on6, card_on7, card_on8, card_on9, card_onA, card_onB, card_onC, card_lock1, card_lock2, card_lock3, card_lock4, card_lock5, card_lock6, card_lock7, card_lock8, card_lock9, card_lockA, card_lockB, card_lockC, card_flip1, card_flip2, card_flip3, card_flip4, card_flip5, card_flip6, card_flip7, card_flip8, card_flip9, card_flipA, card_flipB, card_flipC) IS
 	BEGIN
+		--Will display cards true colors if their lock function is on, red otherwise
 		IF (card_on1 = '1') THEN --CARD 1 BLUE+GREEN FLIP
 		      IF (card_lock1 = '1')then
 		        red <= '0';
