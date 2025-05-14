@@ -7,9 +7,6 @@ ENTITY vga_top IS
     PORT (
         clk_in    : IN STD_LOGIC;
         SW : IN STD_LOGIC_VECTOR (15 downto 0);
-        KB_row : IN STD_LOGIC_VECTOR (4 downto 1);
-        btnc : IN STD_LOGIC;
-        KB_col : OUT STD_LOGIC_VECTOR (4 downto 1);
         vga_red : OUT STD_LOGIC_VECTOR (2 downto 0);
         vga_green : OUT STD_LOGIC_VECTOR (2 DOWNTO 0);
         vga_blue  : OUT STD_LOGIC_VECTOR (1 DOWNTO 0);
