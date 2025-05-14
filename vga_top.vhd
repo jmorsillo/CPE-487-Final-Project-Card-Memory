@@ -25,7 +25,7 @@ ARCHITECTURE Behavioral OF vga_top IS
     SIGNAL S_red, S_green, S_blue : STD_LOGIC;
     SIGNAL S_vsync : STD_LOGIC;
     SIGNAL S_pixel_row, S_pixel_col : STD_LOGIC_VECTOR (10 DOWNTO 0);
-    
+    -- card x and y coordinates in rows/columns format
     Constant cy1 : std_logic_vector(10 downto 0) := conv_std_logic_vector(100,11);
     Constant cy2 : std_logic_vector(10 downto 0) := conv_std_logic_vector(300,11);
     Constant cy3 : std_logic_vector(10 downto 0) := conv_std_logic_vector(500,11);
@@ -51,7 +51,7 @@ ARCHITECTURE Behavioral OF vga_top IS
     Signal flipB : std_logic := '1';
     Signal flipC : std_logic := '1';
     Signal RESET : std_logic := '0';
-    
+    --this component is where the game will happen
     COMPONENT card IS
         PORT (
             v_sync : IN STD_LOGIC;
@@ -89,6 +89,7 @@ ARCHITECTURE Behavioral OF vga_top IS
             blue : OUT STD_LOGIC
         );
     END COMPONENT;
+	    
     COMPONENT vga_sync IS
         PORT (
             pixel_clk : IN STD_LOGIC;
@@ -104,16 +105,6 @@ ARCHITECTURE Behavioral OF vga_top IS
             pixel_col : OUT STD_LOGIC_VECTOR (10 DOWNTO 0)
         );
     END COMPONENT;
-    
---    COMPONENT keypad IS
---	PORT (
---		samp_ck : IN STD_LOGIC; -- clock to strobe columns
---		col : OUT STD_LOGIC_VECTOR (4 DOWNTO 1); -- output column lines
---		row : IN STD_LOGIC_VECTOR (4 DOWNTO 1); -- input row lines
---		value : OUT STD_LOGIC_VECTOR (3 DOWNTO 0); -- hex value of key depressed
---	    hit : OUT STD_LOGIC); -- indicates when a key has been pressed
---    END COMPONENT;
-    
     component clk_wiz_0 is
     port (
       clk_in1  : in std_logic;
@@ -131,7 +122,6 @@ BEGIN
 
     cardgame: card
     PORT MAP(
-        --instantiate ball component
         v_sync    => S_vsync, 
         pixel_row => S_pixel_row, 
         pixel_col => S_pixel_col, 
@@ -184,15 +174,7 @@ BEGIN
     );
     vga_vsync <= S_vsync; --connect output vsync
     
---    kp: keypad
---    port map(
---        samp_ck        => pxl_clk,
---	    col            => KB_col,
---	    row            => KB_row,
---        value          => value,
---	    hit            => hit
---	    );
-	    
+
     clk_wiz_0_inst : clk_wiz_0 
     port map (
       clk_in1 => clk_in,
@@ -201,34 +183,6 @@ BEGIN
     
 Process (flip1, flip2, flip3, flip4, flip5, flip6, flip7, flip8, flip9, flipA, flipB, flipC, hit, value)
 begin
-
---case hit & value is
-   -- when "10001" => flip1 <= '0';
- --   when "10010" => flip2 <= '0';
-   -- when "10011" => flip3 <= '0';
-    --when "10100" => flip4 <= '0';
---    when "10101" => flip5 <= '0';
-  --  when "10110" => flip6 <= '0';
- --   when "10111" => flip7 <= '0';
-  --  when "11000" => flip8 <= '0';
-  --  when "11001" => flip9 <= '0';
-  --  when "11010" => flipA <= '0';
-  --  when "11011" => flipB <= '0';
-  --  when "11100" => flipC <= '0';
-  --  when others => 
-  --  flip1 <= '1';
-  --  flip2 <= '1';
-  --  flip3 <= '1';
-   -- flip4 <= '1';
-  --  flip5 <= '1';
-  --  flip6 <= '1';
-  --  flip7 <= '1';
-  --  flip8 <= '1'; 
-  --  flip9 <= '1';
-  --  flipA <= '1';
-  --  flipB <= '1';
-  --  flipC <= '1';
-  --  end case;
     
     case SW is
     when "0000000000000001" => flip1 <= '0'; hit <='1';
