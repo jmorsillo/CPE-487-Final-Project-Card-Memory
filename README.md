@@ -45,7 +45,13 @@ This lab utilizes the Nexys A7-100T FPGA board coded with VHDL to create a card 
 
 - The **card_memory** constraint file contains the 100MHz clock signal, vga connections, and all of the board switches
 
-  
+- **INPUTS/OUTPUTS ONTO THE BOARD:**
+     - Inputs:
+          - Switch inputs (from right to left, first 12 switches, or switch 0 to 11, and switch 15/first one on the left)
+          - clk cycle
+     - Outputs:
+          - VGA RGB values
+          - VGA sync values
 ### 1. Create a new RTL project vgaball in Vivado Quick Start
 
 - Create five new source files of file type VHDL called clk_wiz_0, clk_wiz_0_clk_wiz, vga_sync, card, and vga_top
