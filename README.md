@@ -22,14 +22,19 @@ This lab utilizes the Nexys A7-100T FPGA board coded with VHDL to create a card 
   - describe how this is modified version of ball from lab 3
 
  - The **vga_sync** module handles the utilization of the VGA displaying by using a clock to drive horizontal and vertical counters
+ - 
    - These counters are then used to generate the various timing signals.
    - The vertical and horizontal sync waveforms, vsync and hsync, will go directly to the VGA display with the column and row address, pixel_col and pixel_row, of the current pixel being displayed.
    - This module also takes as input the current red, green, and blue video data and gates it with a signal called video_on.
    - This ensures that no video is sent to the display during the sync and blanking periods.
    - Note that red, green, and blue video are each represented as 1-bit (on-off) quantities
+   - This file is unchanged from Lab 3
+
+
+- The two **clk_wiz** files handle the clock signals that are used in the project and were taken from Lab 3 as well
 
 - The **card_memory** constraint file contains the 100MHz clock signal, vga connections, and all of the board switches
-- The two **clk_wiz**
+
   
 ### 1. Create a new RTL project vgaball in Vivado Quick Start
 
