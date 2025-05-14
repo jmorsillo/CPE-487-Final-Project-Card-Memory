@@ -22,7 +22,8 @@ https://github.com/user-attachments/assets/434c481d-3c54-4193-b8e1-693e650e6bd3
 
 - The failing
 
-https://github.com/user-attachments/assets/3b412f21-6201-4c28-afa0-7cf831dd4a29
+https://github.com/user-attachments/assets/e82f6d74-b476-4938-8cf6-7c8e5ff6ae24
+
 
 
 - The top of the hierarchy is the **vga_top** module which contains all of the board inputs which are mapped throughout the project **card** and **vga_sync** modules, and the logic used to flip the cards using the onboard switches.
